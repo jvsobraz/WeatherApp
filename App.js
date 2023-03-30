@@ -1,44 +1,44 @@
 import { Text, View, StyleSheet, TextInput, ImageBackground } from 'react-native';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api } from './api';
 
-const apiKey = '4c88ba76043a4447561819b128890d6b';
+const apiKey = 'e5d55877d7ef290e791dd048dfd1bbaa';
 
 export default function App() {
 
-  const [cidade, setCidade] = useState('São Paulo')
-  const [tempo, setTempo] = useState('')
-  const [temperatura, setTemperatura] = useState(0)
+  const [city, setCity] = useState('São Paulo')
+  const [weather, setWeather] = useState('')
+  const [temperature, setTemperature] = useState(0)
 
   useEffect(() => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${cidade},BR&appid=${apiKey}`)
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},BR&appid=${apiKey}`)
       .then(res => {
-        const clima = res.data.weather[0].description
-        const temp = (parseInt(res.data.main.temp) - 273.15).toFixed(1) + '°C'
-        setTempo(clima);
-        setTemperatura(temp)
+        const weather = res.data.weather[0].description
+        const temperature = (parseInt(res.data.main.temperature) - 273.15).toFixed(1) + '°C'
+        setWeather(weather);
+        setTemperature(temperature)
 
       }).catch(error => {
         console.log(error)
         return 'Error'
       })
-  }, [cidade]);
+  }, [city]);
 
 
   return (
   <ImageBackground source={require('./assets/image/background.jpg')} style={styles.background}>
       <View style={styles.container}>
-        <Text style={styles.cidade}>{cidade}</Text>
-        <Text style={styles.info}>{tempo}</Text>
-        <Text style={styles.info}>{temperatura}</Text>
+        <Text style={styles.city}>{city}</Text>
+        <Text style={styles.info}>{weather}</Text>
+        <Text style={styles.info}>{temperature}</Text>
           <TextInput 
             style={styles.input}
             placeholder='Search any city'
-            value={cidade}
-            onChangeText={setCidade}
+            value={city}
+            onChangeText={setCity}
             onBlur={() => {
-              setTemperatura('')
-              setTempo('')
+              setTemperature('')
+              setWeather('')
             }}
           />
 
