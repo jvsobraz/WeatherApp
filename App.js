@@ -1,41 +1,41 @@
-import { Text, View, StyleSheet, TextInput, ImageBackground } from 'react-native';
-import { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TextInput, ImageBackground, Alert } from 'react-native';
+import { React, useEffect, useState } from 'react';
 import { api } from './api';
 
-const apiKey = 'e5d55877d7ef290e791dd048dfd1bbaa';
+//api key: e5d55877d7ef290e791dd048dfd1bbaa
 
 export default function App() {
 
-  const [city, setCity] = useState('São Paulo')
+  const [city, setCity] = useState([])
   const [weather, setWeather] = useState('')
-  const [temperature, setTemperature] = useState(0)
+  const [temperature, setTemperature] = useState(null)
 
   useEffect(() => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city},BR&appid=${apiKey}`)
-      .then(res => {
-        const weather = res.data.weather[0].description
-        const temperature = (parseInt(res.data.main.temperature) - 273.15).toFixed(1) + '°C'
+    api.get()
+      .then(response => {
+        const weather = response.data.weather[0].description
+        const temperature = (parseInt(response.data.main.temperature) - 273.15).toFixed(1) + 'Celsius'
         setWeather(weather);
         setTemperature(temperature)
 
-      }).catch(error => {
-        console.log(error)
-        return 'Error'
+      })
+      .catch(err => {
+        console.log(err)
+        Alert.alert('Error, not possible to find this city: ');
       })
   }, [city]);
 
-
   return (
-  <ImageBackground source={require('./assets/image/background.jpg')} style={styles.background}>
+  <ImageBackground source={require('./assets/background.jpg')} style={styles.background}>
       <View style={styles.container}>
         <Text style={styles.city}>{city}</Text>
-        <Text style={styles.info}>{weather}</Text>
-        <Text style={styles.info}>{temperature}</Text>
+        <Text style={styles.weather}>{weather}</Text>
+        <Text style={styles.temperature}>{temperature}</Text>
           <TextInput 
             style={styles.input}
-            placeholder='Search any city'
-            value={city}
+            placeholder='SEARCH FOR ANY CITY'
             onChangeText={setCity}
+            value={city}
             onBlur={() => {
               setTemperature('')
               setWeather('')
@@ -49,6 +49,13 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+
   background: {
     flex: 1,
     resizeMode: 'cover',
@@ -56,35 +63,39 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-  },
-  cidade: {
+
+  city: {
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#fff'
+    color: '#ddd'
   },
-  info: {
+
+  weather: {
     fontSize: 20,
     textAlign: 'center',
-    marginVertical: 5,
-    color: '#fff',
+    marginVertical: 10,
+    color: '#ddd',
     
   },
+
+  temperature: {
+    fontSize: 20,
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#ddd',
+  },
+
   input: {
-    height: 32,
+    height: 30,
     width: '60%',
-    borderColor: "gray",
+    borderColor: "black",
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 20,
     backgroundColor: 'transparent',
-    color: '#fff'
+    color: '#ddd'
   },
 });
