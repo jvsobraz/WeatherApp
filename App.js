@@ -1,3 +1,5 @@
+//PEGUEI DE EXEMPLO O PROJETO: "pokemon-fiap"
+
 import { Text, View, StyleSheet, TextInput, ImageBackground, Alert } from 'react-native';
 import { React, useEffect, useState } from 'react';
 import { api } from './api';
